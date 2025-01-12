@@ -87,7 +87,7 @@ for (i in unique(MyData$Spec_short)){
   print("############################################")
   print("WARNING: This can take very long for certain models.")
   print("Be assured, that the procedure works, even if you do not get response for quite some time.")
-  print("In case of Problem,s an ERROR is thrown and the computation stops")
+  print("In case of Problems an ERROR is thrown and the computation stops")
   print("############################################")
 
   # Erzeugen eines Ordners für den Output der Modelle
@@ -613,9 +613,6 @@ for(i in unique(MyData$Spec_short)){
   
   GridNoNA_ras_sd<- st_rasterize(GridNoNA %>% dplyr::select(w.sd, geometry))
   GridNoNA_ras_sd<- st_crop(GridNoNA_ras_sd,sachsen_sf)
-  
-  saveRDS(GridNoNA_ras_mean,paste0(filename,"/GridNoNA_ras_mean_",i,".rds"))
-  saveRDS(GridNoNA_ras_sd,paste0(filename,"/GridNoNA_ras_sd_",i,".rds"))
   
   
   plot_spat_mean<- ggplot() + geom_sf(data= GridNoNA, aes(col=w.pm),shape=15, size=2)+ geom_point(data=Spec_dat, aes(x=X, y=Y), col="gray60", alpha=0.04) +
