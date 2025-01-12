@@ -475,7 +475,7 @@ for(i in speclist){
   
   
   ## Abspeichern des nummerischen Ouitputs
-  write.xlsx(GoodnessOfFits, filename= paste0(getwd(),"/Model_output/GoodnessOfFit_table.xlsx"))
+  write.xlsx(GoodnessOfFits, file= paste0(getwd(),"/Model_output/GoodnessOfFit_table.xlsx"))
   
 }
 
