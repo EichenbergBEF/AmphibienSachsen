@@ -84,6 +84,12 @@ setwd(choose.dir())
 for (i in unique(MyData$Spec_short)){
   
   print(paste0("Running Model selection for ",i," and calculating best Model"))
+  print("############################################")
+  print("WARNING: This can take very long for certain models.")
+  print("Be assured, that the procedure works, even if you do not get response for quite some time.")
+  print("In case of Problem,s an ERROR is thrown and the computation stops")
+  print("############################################")
+
   
   dat<- MyData[MyData$Spec_short==i,]
   #dat <- dat %>% drop_na(Tstab_Summer_Vorj)
