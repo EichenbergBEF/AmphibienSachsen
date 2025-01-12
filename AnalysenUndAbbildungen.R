@@ -134,9 +134,8 @@ for (i in unique(MyData$Spec_short)){
                         "Indiv" = dat$Anzahl,
                         "Jahr.1" = dat$Jahr-min(dat$Jahr)+1,
                         "Laenge" = MyStd(dat$Laenge),
-                        "Dauer" = factor(dat$fDauer),
+                        "Dauer" = factor(dat$Dauer),
                         "Material" = factor(dat$Material),
-                        "Wanderung" = factor(dat$Wanderung),
                         "Temp_mean_Fruehling" = MyStd(dat$Temp_mean_Fruehling),
                         "Temp_stab_Fruehling" = MyStd(dat$Temp_stab_Fruehling),
                         "KWB_Fruehling" = MyStd(dat$KWB_Fruehling),
@@ -423,6 +422,7 @@ for(i in speclist){
   
   
   ### Extraktion der observed data (ohne NA's)
+  observed_mean<- y
   valid_indices <- which(!is.na(y))  # Indices of non-NA entries in y
   y_clean <- y[valid_indices]        # Filtered y (observed values)
   y_pred_clean <- round(observed_mean[valid_indices],0)
