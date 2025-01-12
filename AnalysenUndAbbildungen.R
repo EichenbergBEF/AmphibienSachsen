@@ -35,12 +35,6 @@ install_and_load_packages(required_packages)
 ###### Vorbereitungen für die Analyse
 ###############################################################################
 
-##### Definieren eines Working Directories
-### Dieses müssen Sie selbst definieren. Hier werden alle weiteren Daten erzeugt bzw abgelegt
-
-setwd('IhrWorkingDirectory')
-
-
 ### Einladen der Funktion für die Modellselsktion vom GitHub Repositoriy
 source(url("https://raw.githubusercontent.com/EichenbergBEF/AmphibienSachsen/refs/heads/main/Funktion_Modellselektion.R"))
 
@@ -77,6 +71,10 @@ url2<- "https://raw.githubusercontent.com/EichenbergBEF/AmphibienSachsen/main/sa
 
 sachsen<- readRDS(url(url2))
 
+##### Definieren eines Working Directories
+### Dieses müssen Sie selbst definieren. Hier werden alle weiteren Daten erzeugt bzw abgelegt
+
+setwd(choose.dir())
 
 ################################################################################
 ################# Durchführen der Analyse mit dem Modelldatensatz ##############
