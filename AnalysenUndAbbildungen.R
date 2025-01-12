@@ -493,7 +493,11 @@ for(i in unique(MyData$Spec_short)){
   Species<- unique(na.omit(MyData$Species[which(MyData$Spec_short==i)]))
   
   filename<-paste0(getwd(),"/Model_output/",i)
- 
+  
+  
+  
+  sachsen_utm<- spTransform(sachsen, CRS("+proj=utm +zone=33 +ellps=WGS84 +units=m +no_defs"))
+  sachsen_sf<- st_as_sf(sachsen_utm)
   
   
   #### Summary-table dr Modellparameter machen
@@ -532,7 +536,7 @@ for(i in unique(MyData$Spec_short)){
   ggsave(predictions_at_locs,file = paste0(filename,"/Vorhersagen_Standorte.png"), device = "png", width = 1754, height= 1240, dpi = 150, units = "px")
   
   ## Beobachtet vs. Predicted
-   
+  
   beobachtet_predicted<- ggplot() + geom_point(data= Spec_dat, aes(x=Anzahl,y=preds)) + 
     geom_pointrange(data= Spec_dat, aes(x=Anzahl,y=preds,ymin = lower, ymax = upper),col="gray60")+
     xlab("Beobachtet") + ylab("Vorhersage") + geom_smooth(data=Spec_dat, aes(x=Anzahl, y=preds),method="lm") + 
@@ -582,8 +586,9 @@ for(i in unique(MyData$Spec_short)){
                      max.edge=c(1,5)*(MaxEdge*1000),
                      cutoff= (MaxEdge*1000)/5) 
   
-  x.grid <- seq(min(st_coordinates(sachsen_utm)[,1]),max(st_coordinates(sachsen_utm)[,1]), length.out=300)
-  y.grid <- seq(min(st_coordinates(sachsen_utm)[,2]),max(st_coordinates(sachsen_utm)[,2]), length.out=300)
+  
+  x.grid <- seq(min(st_coordinates(sachsen_sf)[,1]),max(st_coordinates(sachsen_sf)[,1]), length.out=300)
+  y.grid <- seq(min(st_coordinates(sachsen_sf)[,2]),max(st_coordinates(sachsen_sf)[,2]), length.out=300)
   
   Grid <- expand.grid(X = x.grid, 
                       Y = y.grid)
@@ -599,15 +604,15 @@ for(i in unique(MyData$Spec_short)){
   
   GridNoNA  <- na.exclude(Grid)
   
-  GridNoNA<- st_as_sf(GridNoNA, coords=c("X","Y"), crs=st_crs(sachsen_utm))
+  GridNoNA<- st_as_sf(GridNoNA, coords=c("X","Y"), crs=st_crs(sachsen_sf))
   
-  GridNoNA<- st_intersection(GridNoNA,sachsen_utm)
+  GridNoNA<- st_intersection(GridNoNA,sachsen_sf)
   
   GridNoNA_ras_mean <- st_rasterize(GridNoNA %>% dplyr::select(w.pm, geometry))
-  GridNoNA_ras_mean<- st_crop(GridNoNA_ras_mean,sachsen_utm)
+  GridNoNA_ras_mean<- st_crop(GridNoNA_ras_mean,sachsen_sf)
   
   GridNoNA_ras_sd<- st_rasterize(GridNoNA %>% dplyr::select(w.sd, geometry))
-  GridNoNA_ras_sd<- st_crop(GridNoNA_ras_sd,sachsen_utm)
+  GridNoNA_ras_sd<- st_crop(GridNoNA_ras_sd,sachsen_sf)
   
   saveRDS(GridNoNA_ras_mean,paste0(filename,"/GridNoNA_ras_mean_",i,".rds"))
   saveRDS(GridNoNA_ras_sd,paste0(filename,"/GridNoNA_ras_sd_",i,".rds"))
@@ -626,7 +631,7 @@ for(i in unique(MyData$Spec_short)){
           legend.text = element_text(angle=30, hjust=1),
           legend.position="right")+
     ggtitle(paste(Art,Species,sep=" / ")) +   
-    geom_sf(data = sachsen_utm, fill = NA, colour = "black", size = 0.8)+ theme(plot.title = element_text(hjust=0.5,face = "italic"))
+    geom_sf(data = sachsen_sf, fill = NA, colour = "black", size = 0.8)+ theme(plot.title = element_text(hjust=0.5,face = "italic"))
   
   ggsave(plot_spat_mean,file = paste0(filename,"/Spat_Resid_mean.png"), device = "png", width = 1754, height= 1240, dpi = 150, units = "px")
   
@@ -643,7 +648,7 @@ for(i in unique(MyData$Spec_short)){
           legend.text = element_text(angle=30, hjust=1),
           legend.position="right")+
     ggtitle(paste(Art,Species,sep=" / ")) +
-    geom_sf(data = sachsen_utm, fill = NA, colour = "black", size = 0.8)+ theme(plot.title = element_text(hjust=0.5,face = "italic"))
+    geom_sf(data = sachsen_sf, fill = NA, colour = "black", size = 0.8)+ theme(plot.title = element_text(hjust=0.5,face = "italic"))
   
   ggsave(plot_spat_sd,file = paste0(filename,"/Spat_Resid_sd.png"), device = "png", width = 1754, height= 1240, dpi = 150, units = "px")
   
