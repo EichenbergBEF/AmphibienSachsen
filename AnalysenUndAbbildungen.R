@@ -90,6 +90,9 @@ for (i in unique(MyData$Spec_short)){
   print("In case of Problem,s an ERROR is thrown and the computation stops")
   print("############################################")
 
+  # Erzeugen eines Ordners für den Output der Modelle
+  dir.create(paste0(getwd(),"/Models"))
+
   
   dat<- MyData[MyData$Spec_short==i,]
   #dat <- dat %>% drop_na(Tstab_Summer_Vorj)
